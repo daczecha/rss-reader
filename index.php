@@ -1,10 +1,5 @@
 <?php 
-    include('core/init.inc.php');
-?>
-<?php 
-   function rmspace($buffer){ 
-        return preg_replace('~>\s*\n\s*<~', '><', $buffer); 
-   };
+    include('articles.php');
 ?>
 
 <!DOCTYPE html>
@@ -17,21 +12,44 @@
     <title>RSS Reader</title>
 </head>
 <body>
+    <header>
+        <form action="index.php" method="post">
+            <label for="feed">
+                Enter RSS Feed URL
+            </label>
+            <input type="url" name="feed" placeholder="URL" default="http://feeds.bbci.co.uk/news/rss.xml">
+            <button type="submit" name="submit">SUBMIT</button>
+        </form>
+    </header>
+    
+    <?php 
+    $url = 'http://feeds.bbci.co.uk/news/rss.xml';
+    if(!empty($_POST['feed'])){
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            $url = $_POST['feed'];
+        }
+    }
+    ?>
+    
     <main>
-        <?php
-            foreach(fetch_news() as $article){
+        <ul>
+            <?php
+            foreach(fetch_news($url) as $article){
             ?>
-                <h3>
-                    <a href="<?php echo $article['link'];?>">
-                        <?php echo $article['title']; ?>
-                    </a>
-                </h3>
-                <p>
-                    <?php echo $article['description']; ?>
-                </p>
+                <li class="article">
+                    <h3>
+                        <a href="<?php echo $article['link'];?>">
+                            <?php echo $article['title']; ?>
+                        </a>
+                    </h3>
+                    <p>
+                        <?php echo $article['description']; ?>
+                    </p>
+                </li>
             <?php
             }
-        ?>
+            ?>
+        </ul>
     </main>
 </body>
 </html>
