@@ -2,6 +2,18 @@
     include('articles.php');
 ?>
 
+<?php 
+    $url = '';
+    if(!empty($_POST['feed'])){
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            $url = $_POST['feed'];
+        }
+    }else{
+        $error = 'fill the input form';
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,38 +29,24 @@
             <label for="feed">
                 Enter RSS Feed URL
             </label>
-            <input type="url" name="feed" placeholder="URL" default="http://feeds.bbci.co.uk/news/rss.xml">
+            <input type="url" name="feed" placeholder="URL" value="<?php echo htmlspecialchars($url)?>">
             <button type="submit" name="submit">SUBMIT</button>
         </form>
     </header>
-    
-    <?php 
-    $url = 'http://feeds.bbci.co.uk/news/rss.xml';
-    if(!empty($_POST['feed'])){
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $url = $_POST['feed'];
-        }
-    }
-    ?>
-    
     <main>
         <ul>
-            <?php
-            foreach(fetch_news($url) as $article){
-            ?>
+            <?php foreach(fetch_news($url) as $article): ?>
                 <li class="article">
                     <h3>
-                        <a href="<?php echo $article['link'];?>">
-                            <?php echo $article['title']; ?>
+                        <a href="<?php echo htmlspecialchars($article['link']);?>">
+                            <?php echo htmlspecialchars($article['title']); ?>
                         </a>
                     </h3>
                     <p>
-                        <?php echo $article['description']; ?>
+                        <?php echo htmlspecialchars($article['description']); ?>
                     </p>
                 </li>
-            <?php
-            }
-            ?>
+            <?php endforeach ?>
         </ul>
     </main>
 </body>
