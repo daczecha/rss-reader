@@ -8,8 +8,6 @@
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $url = $_POST['feed'];
         }
-    }else{
-        $error = 'fill the input form';
     }
 ?>
 
